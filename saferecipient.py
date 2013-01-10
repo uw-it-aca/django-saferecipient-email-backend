@@ -13,13 +13,14 @@ class EmailBackend(SMTPEmailBackend):
     """
     def send_messages(self, email_messages):
         for message in email_messages:
-            originals = "Originally sent from: %s\nOriginally sent to: %s\n" % (
-                message.from_email, tuple(message.recipients()))
+            originals = "Original From: %s\nOriginal To: %s\nOriginal CC: %s\nOriginal BCC: %s\n" % (
+                message.from_email, message.to, message.cc, message.bcc)
 
             message.from_email = settings.SAFE_EMAIL_RECIPIENT
             message.to = [settings.SAFE_EMAIL_RECIPIENT]
+            message.cc = []
+            message.bcc = []
             text_attachment = MIMEText(originals)
-            text_attachment.add_header("Content-disposition",
-                'attachment; filename="original_emails.txt"')
+            text_attachment.add_header("Content-disposition", 'attachment; filename="original_emails.txt"')
             message.attach(text_attachment)
         return super(EmailBackend, self).send_messages(email_messages)
