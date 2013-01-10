@@ -1,0 +1,2 @@
+django-saferecipient-email-backend
+==================================
