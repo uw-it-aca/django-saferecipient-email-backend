@@ -1,0 +1,2 @@
+include saferecipient/VERSION
+recursive-include saferecipient *
