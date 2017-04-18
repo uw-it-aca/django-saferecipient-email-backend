@@ -1,0 +1,32 @@
+sudo: false
+language: python
+python:
+- '2.7'
+- '3.4'
+- '3.5'
+- '3.6'
+before_script:
+- pip install -e .
+- pip install pep8
+- pip install coverage
+- pip install python-coveralls
+- cp travis-ci/manage.py manage.py
+script:
+- pep8 saferecipient/
+- python -m compileall saferecipient/
+- coverage run --source=saferecipient/ manage.py test saferecipient
+after_success:
+- coveralls
+before_deploy:
+- find saferecipient/ -name \*.pyc -exec rm {} \;
+- echo $TRAVIS_TAG > saferecipient/VERSION
+deploy:
+  provider: pypi
+  server: https://pypi.python.org/pypi
+  user: uw-it-aca
+  skip_cleanup: true
+  password:
+    secure:
+  on:
+    tags: true
+    python: '3.5'
