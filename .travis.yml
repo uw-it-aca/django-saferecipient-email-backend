@@ -26,7 +26,7 @@ deploy:
   user: uw-it-aca
   skip_cleanup: true
   password:
-    secure:
+    secure: aQ8s9BNOZP9fFfjTeqLnVAokVF0tzHQAg7oO2pdNFDYHpEusTw5RF2X30Z83li5rdSyq8kHKHZryH+NcYJutV9w5WGZi/9IZWwtDQOn0A4F4A5aL57MjmgH3NJ9VTbz9J1wILM6kwvu16DdEiNGNK+sCkQ5LJXHq6RnAfD2dLGw=
   on:
     tags: true
     python: '3.5'
