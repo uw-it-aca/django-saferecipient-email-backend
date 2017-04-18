@@ -15,7 +15,7 @@ VERSION = VERSION.replace("\n", "")
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='SafeEmailBackend',
+    name='Django-Safe-EmailBackend',
     version=VERSION,
     packages=['saferecipient'],
     author="UW-IT AXDD",
