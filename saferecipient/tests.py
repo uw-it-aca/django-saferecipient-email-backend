@@ -20,7 +20,7 @@ class TestEmailBackend(TestCase):
     def test_no_setting(self):
         message = self._setup_message()
         self.assertRaises(
-            AttributeError, EmailBackend().send_messages, [message])
+            AttributeError, EmailBackend()._safeguard, message)
 
     def _setup_message(self):
         return EmailMultiAlternatives(
