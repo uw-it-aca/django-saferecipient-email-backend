@@ -1,3 +1,7 @@
+[![Build Status](https://api.travis-ci.org/uw-it-aca/django-saferecipient-email-backend.svg?branch=master)](https://travis-ci.org/uw-it-aca/django-saferecipient-email-backend)
+[![Coverage Status](https://coveralls.io/repos/uw-it-aca/django-saferecipient-email-backend/badge.png?branch=master)](https://coveralls.io/r/uw-it-aca/django-saferecipient-email-backend?branch=master)
+
+
 django-saferecipient-email-backend
 ==================================
 
