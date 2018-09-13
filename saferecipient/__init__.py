@@ -19,10 +19,10 @@ class EmailBackend(SMTPEmailBackend):
         return super(EmailBackend, self).send_messages(email_messages)
 
     def _safeguard(self, message):
-        originals = (
-            "Original From: %s\nOriginal To: %s\nOriginal CC: %s\n"
-            "Original BCC: %s\n") % (
-                message.from_email, message.to, message.cc, message.bcc)
+        originals = ("Original From: {}\nOriginal To: {}\nOriginal CC: {}\n"
+                     "Original BCC: {}\n").format(
+                         message.from_email, message.to,
+                         message.cc, message.bcc)
 
         message.from_email = settings.SAFE_EMAIL_RECIPIENT
         message.to = [settings.SAFE_EMAIL_RECIPIENT]
