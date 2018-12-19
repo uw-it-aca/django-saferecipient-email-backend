@@ -1,5 +1,5 @@
 """SMTP email backend class that only sends email to a safe email address"""
-
+import re
 from django.core.mail.backends.smtp import EmailBackend as SMTPEmailBackend
 from email.mime.text import MIMEText
 from django.conf import settings
@@ -24,12 +24,30 @@ class EmailBackend(SMTPEmailBackend):
                          message.from_email, message.to,
                          message.cc, message.bcc)
 
-        message.from_email = settings.SAFE_EMAIL_RECIPIENT
-        message.to = [settings.SAFE_EMAIL_RECIPIENT]
-        message.cc = []
-        message.bcc = []
+        if not self._is_whitelisted(message.from_email):
+            message.from_email = settings.SAFE_EMAIL_RECIPIENT
+
+        message.to = self._only_safe_emails(message.to)
+        message.cc = self._only_safe_emails(message.cc)
+        message.bcc = self._only_safe_emails(message.bcc)
+
         text_attachment = MIMEText(originals)
         text_attachment.add_header(
             'Content-disposition',
             'attachment; filename="original_emails.txt"')
         message.attach(text_attachment)
+
+    def _only_safe_emails(self, emails):
+        """"Given a list of emails, checks whether they are all in the white list."""
+
+        if any(not self._is_whitelisted(to) for to in emails):
+            emails = [email for email in emails if self._is_whitelisted(email)]
+            if settings.SAFE_EMAIL_RECIPIENT not in emails:
+                emails.append(settings.SAFE_EMAIL_RECIPIENT)
+        return emails
+
+    def _is_whitelisted(self, email):
+        """"Check if an email is in the whitelist. If there's no whitelist, it's assumed it's not whitelisted. """
+
+        return hasattr(settings, "SAFE_EMAIL_WHITELIST") and \
+               any(re.match(m, email) for m in settings.SAFE_EMAIL_WHITELIST)
