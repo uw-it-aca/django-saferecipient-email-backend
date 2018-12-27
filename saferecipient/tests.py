@@ -22,7 +22,8 @@ class TestEmailBackend(TestCase):
 
     def test_safeguard_with_whitelist(self):
         with self.settings(SAFE_EMAIL_RECIPIENT=self.SAFE_EMAIL), \
-             self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com", r"safe.*@example\.org"]):
+             self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com",
+                                                 r"safe.*@example\.org"]):
             message = self._setup_message(from_email='sender@example.com',
                                           to=['recipient@example.com'],
                                           cc=["safe+safe@example.org"],
@@ -44,22 +45,36 @@ class TestEmailBackend(TestCase):
 
     def test_only_safe_emails(self):
         with self.settings(SAFE_EMAIL_RECIPIENT=self.SAFE_EMAIL), \
-             self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com", r"safe.*@example\.org"]):
+             self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com",
+                                                 r"safe.*@example\.org"]):
             eb = EmailBackend()
             self.assertEqual([], eb._only_safe_emails([]))
-            self.assertEqual([self.SAFE_EMAIL], eb._only_safe_emails(["unsafe@example.org"]))
-            self.assertEqual([self.SAFE_EMAIL], eb._only_safe_emails(["unsafe@example.org", "unsafe2@example.org"]))
             self.assertEqual([self.SAFE_EMAIL],
-                             eb._only_safe_emails([self.SAFE_EMAIL, "unsafe@example.org", "unsafe2@example.org"]))
-            self.assertEqual(["safe+2@example.com", self.SAFE_EMAIL],
-                             eb._only_safe_emails(["safe+2@example.com", self.SAFE_EMAIL, "unsafe@example.org",
+                             eb._only_safe_emails(["unsafe@example.org"]))
+            self.assertEqual([self.SAFE_EMAIL],
+                             eb._only_safe_emails(["unsafe@example.org",
                                                    "unsafe2@example.org"]))
-            self.assertEqual(["safe+2@example.com", self.SAFE_EMAIL, "safe@example.org"],
-                             eb._only_safe_emails(["safe+2@example.com", self.SAFE_EMAIL, "unsafe@example.org",
-                                                   "unsafe2@example.org", "safe@example.org"]))
+            self.assertEqual([self.SAFE_EMAIL],
+                             eb._only_safe_emails([self.SAFE_EMAIL,
+                                                   "unsafe@example.org",
+                                                   "unsafe2@example.org"]))
+            self.assertEqual(["safe+2@example.com", self.SAFE_EMAIL],
+                             eb._only_safe_emails(["safe+2@example.com",
+                                                   self.SAFE_EMAIL,
+                                                   "unsafe@example.org",
+                                                   "unsafe2@example.org"]))
+            self.assertEqual(["safe+2@example.com",
+                              self.SAFE_EMAIL,
+                              "safe@example.org"],
+                             eb._only_safe_emails(["safe+2@example.com",
+                                                   self.SAFE_EMAIL,
+                                                   "unsafe@example.org",
+                                                   "unsafe2@example.org",
+                                                   "safe@example.org"]))
 
     def test_whitelist(self):
-        with self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com", r"safe.*@example\.org"]):
+        with self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com",
+                                                 r"safe.*@example\.org"]):
             eb = EmailBackend()
             self.assertTrue(eb._is_whitelisted("example@example.com"))
             self.assertTrue(eb._is_whitelisted("example2@example.com"))
@@ -67,11 +82,13 @@ class TestEmailBackend(TestCase):
             self.assertTrue(eb._is_whitelisted("safe+2@example.org"))
             self.assertFalse(eb._is_whitelisted("unsafe@example.org"))
 
-    def _setup_message(self, from_email='sender@example.com', to=None, cc=None, bcc=None):
+    def _setup_message(self, from_email='sender@example.com', to=None,
+                       cc=None, bcc=None):
         if to is None:
             to = ['recipient@example.com']
         if cc is None:
             cc = ['cc_recipient@example.com']
         if bcc is None:
             bcc = []
-        return EmailMultiAlternatives(from_email=from_email, to=to, cc=cc, bcc=bcc, subject='test', body='TEST')
+        return EmailMultiAlternatives(from_email=from_email, to=to, cc=cc,
+                                      bcc=bcc, subject='test', body='TEST')
