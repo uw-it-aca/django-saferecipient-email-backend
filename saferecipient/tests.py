@@ -63,7 +63,10 @@ class TestEmailBackend(TestCase):
                                                    self.SAFE_EMAIL,
                                                    "unsafe@example.org",
                                                    "unsafe2@example.org"]))
-            self.assertEqual((["safe+2@example.com", self.SAFE_EMAIL, "safe@example.org"], True),
+            self.assertEqual((["safe+2@example.com",
+                               self.SAFE_EMAIL,
+                               "safe@example.org"],
+                              True),
                              eb._only_safe_emails(["safe+2@example.com",
                                                    self.SAFE_EMAIL,
                                                    "unsafe@example.org",
