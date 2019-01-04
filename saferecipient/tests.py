@@ -48,24 +48,25 @@ class TestEmailBackend(TestCase):
              self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com",
                                                  r"safe.*@example\.org"]):
             eb = EmailBackend()
-            self.assertEqual([], eb._only_safe_emails([]))
-            self.assertEqual([self.SAFE_EMAIL],
+            self.assertEqual(([], False), eb._only_safe_emails([]))
+            self.assertEqual(([self.SAFE_EMAIL], True),
                              eb._only_safe_emails(["unsafe@example.org"]))
-            self.assertEqual([self.SAFE_EMAIL],
+            self.assertEqual(([self.SAFE_EMAIL], True),
                              eb._only_safe_emails(["unsafe@example.org",
                                                    "unsafe2@example.org"]))
-            self.assertEqual([self.SAFE_EMAIL],
+            self.assertEqual(([self.SAFE_EMAIL], True),
                              eb._only_safe_emails([self.SAFE_EMAIL,
                                                    "unsafe@example.org",
                                                    "unsafe2@example.org"]))
-            self.assertEqual(["safe+2@example.com", self.SAFE_EMAIL],
+            self.assertEqual((["safe+2@example.com", self.SAFE_EMAIL], True),
                              eb._only_safe_emails(["safe+2@example.com",
                                                    self.SAFE_EMAIL,
                                                    "unsafe@example.org",
                                                    "unsafe2@example.org"]))
-            self.assertEqual(["safe+2@example.com",
-                              self.SAFE_EMAIL,
-                              "safe@example.org"],
+            self.assertEqual((["safe+2@example.com",
+                               self.SAFE_EMAIL,
+                               "safe@example.org"],
+                              True),
                              eb._only_safe_emails(["safe+2@example.com",
                                                    self.SAFE_EMAIL,
                                                    "unsafe@example.org",
