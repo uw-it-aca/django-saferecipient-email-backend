@@ -25,28 +25,33 @@ class EmailBackend(SMTPEmailBackend):
                          message.from_email, message.to,
                          message.cc, message.bcc)
 
+        from_modified = False
         if not self._is_whitelisted(message.from_email):
+            from_modified = True
             message.from_email = settings.SAFE_EMAIL_RECIPIENT
 
-        message.to = self._only_safe_emails(message.to)
-        message.cc = self._only_safe_emails(message.cc)
-        message.bcc = self._only_safe_emails(message.bcc)
+        message.to, to_modified = self._only_safe_emails(message.to)
+        message.cc, cc_modified = self._only_safe_emails(message.cc)
+        message.bcc, bcc_modified = self._only_safe_emails(message.bcc)
 
-        text_attachment = MIMEText(originals)
-        text_attachment.add_header(
-            'Content-disposition',
-            'attachment; filename="original_emails.txt"')
-        message.attach(text_attachment)
+        if from_modified or to_modified or cc_modified or bcc_modified:
+            text_attachment = MIMEText(originals)
+            text_attachment.add_header(
+                'Content-disposition',
+                'attachment; filename="original_emails.txt"')
+            message.attach(text_attachment)
 
     def _only_safe_emails(self, emails):
         """"Given a list of emails, checks whether they are all in the white
         list."""
 
-        if any(not self._is_whitelisted(to) for to in emails):
+        email_modified = False
+        if any(not self._is_whitelisted(email) for email in emails):
+            email_modified = True
             emails = [email for email in emails if self._is_whitelisted(email)]
             if settings.SAFE_EMAIL_RECIPIENT not in emails:
                 emails.append(settings.SAFE_EMAIL_RECIPIENT)
-        return emails
+        return emails, email_modified
 
     def _is_whitelisted(self, email):
         """Check if an email is in the whitelist. If there's no whitelist,
