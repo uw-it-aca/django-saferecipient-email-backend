@@ -1,7 +1,7 @@
 [![Build Status](https://api.travis-ci.org/uw-it-aca/django-saferecipient-email-backend.svg?branch=master)](https://travis-ci.org/uw-it-aca/django-saferecipient-email-backend)
 [![Coverage Status](https://coveralls.io/repos/github/uw-it-aca/django-saferecipient-email-backend/badge.svg?branch=master)](https://coveralls.io/github/uw-it-aca/django-saferecipient-email-backend?branch=master)
-[![PyPi Version](https://img.shields.io/pypi/v/django-saferecipient-email-backend.svg)](https://pypi.python.org/pypi/django-saferecipient-email-backend)
-![Python versions](https://img.shields.io/pypi/pyversions/django-saferecipient-email-backend.svg)
+[![PyPi Version](https://img.shields.io/pypi/v/django-safe-emailbackend.svg)](https://pypi.python.org/pypi/django-safe-emailbackend)
+![Python versions](https://img.shields.io/pypi/pyversions/django-safe-emailbackend.svg)
 
 
 django-saferecipient-email-backend
