@@ -26,7 +26,7 @@ class TestEmailBackend(TestCase):
     def test_safeguard_with_safelist(self):
         with self.settings(SAFE_EMAIL_RECIPIENT=self.SAFE_EMAIL), \
              self.settings(SAFE_EMAIL_SAFELIST=[r".*@example\.com",
-                                                 r"safe.*@example\.org"]):
+                                                r"safe.*@example\.org"]):
             message = self._setup_message(from_email='sender@example.com',
                                           to=['recipient@example.com'],
                                           cc=["safe+safe@example.org"],
@@ -49,7 +49,7 @@ class TestEmailBackend(TestCase):
     def test_only_safe_emails(self):
         with self.settings(SAFE_EMAIL_RECIPIENT=self.SAFE_EMAIL), \
              self.settings(SAFE_EMAIL_SAFELIST=[r".*@example\.com",
-                                                 r"safe.*@example\.org"]):
+                                                r"safe.*@example\.org"]):
             eb = EmailBackend()
             self.assertEqual(([], False), eb._only_safe_emails([]))
             self.assertEqual(([self.SAFE_EMAIL], True),
@@ -78,7 +78,7 @@ class TestEmailBackend(TestCase):
 
     def test_safelist(self):
         with self.settings(SAFE_EMAIL_SAFELIST=[r".*@example\.com",
-                                                 r"safe.*@example\.org"]):
+                                                r"safe.*@example\.org"]):
             eb = EmailBackend()
             self.assertTrue(eb._is_safelisted("example@example.com"))
             self.assertTrue(eb._is_safelisted("example2@example.com"))
