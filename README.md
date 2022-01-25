@@ -11,7 +11,7 @@ This app provides an email backend for Django that will re-route all emails to a
 
 This makes it so you can use any email address you like during testing, without worrying about spamming people.  The original To:, CC:, BCC: and From: will be attached.
 
-Specific email addresses, domains, etc. that will bypass the safe email routing can be added via a regex-based whitelist.
+Specific email addresses, domains, etc. that will bypass the safe email routing can be added via a regex-based safelist.
 
 ### Configuration
 
@@ -21,4 +21,4 @@ To use this, put these in your settings.py:
     SAFE_EMAIL_RECIPIENT='your email address, or a team testing address'
 
     # Optional
-    SAFE_EMAIL_WHITELIST = []
+    SAFE_EMAIL_SAFELIST = []
