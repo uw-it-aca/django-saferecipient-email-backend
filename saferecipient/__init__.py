@@ -29,7 +29,7 @@ class EmailBackend(SMTPEmailBackend):
                          message.cc, message.bcc)
 
         from_modified = False
-        if not self._is_whitelisted(message.from_email):
+        if not self._is_safelisted(message.from_email):
             from_modified = True
             message.from_email = settings.SAFE_EMAIL_RECIPIENT
 
@@ -49,16 +49,16 @@ class EmailBackend(SMTPEmailBackend):
         list."""
 
         email_modified = False
-        if any(not self._is_whitelisted(email) for email in emails):
+        if any(not self._is_safelisted(email) for email in emails):
             email_modified = True
-            emails = [email for email in emails if self._is_whitelisted(email)]
+            emails = [email for email in emails if self._is_safelisted(email)]
             if settings.SAFE_EMAIL_RECIPIENT not in emails:
                 emails.append(settings.SAFE_EMAIL_RECIPIENT)
         return emails, email_modified
 
-    def _is_whitelisted(self, email):
-        """Check if an email is in the whitelist. If there's no whitelist,
-        it's assumed it's not whitelisted."""
+    def _is_safelisted(self, email):
+        """Check if an email is in the safelist. If there's no safelist,
+        it's assumed it's not safelisted."""
 
-        return hasattr(settings, "SAFE_EMAIL_WHITELIST") and \
-            any(re.match(m, email) for m in settings.SAFE_EMAIL_WHITELIST)
+        return hasattr(settings, "SAFE_EMAIL_SAFELIST") and \
+            any(re.match(m, email) for m in settings.SAFE_EMAIL_SAFELIST)
