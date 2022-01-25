@@ -23,9 +23,9 @@ class TestEmailBackend(TestCase):
                  "['recipient@example.com']\nOriginal CC: "
                  "['cc_recipient@example.com']\nOriginal BCC: []\n"))
 
-    def test_safeguard_with_whitelist(self):
+    def test_safeguard_with_safelist(self):
         with self.settings(SAFE_EMAIL_RECIPIENT=self.SAFE_EMAIL), \
-             self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com",
+             self.settings(SAFE_EMAIL_SAFELIST=[r".*@example\.com",
                                                  r"safe.*@example\.org"]):
             message = self._setup_message(from_email='sender@example.com',
                                           to=['recipient@example.com'],
@@ -48,7 +48,7 @@ class TestEmailBackend(TestCase):
 
     def test_only_safe_emails(self):
         with self.settings(SAFE_EMAIL_RECIPIENT=self.SAFE_EMAIL), \
-             self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com",
+             self.settings(SAFE_EMAIL_SAFELIST=[r".*@example\.com",
                                                  r"safe.*@example\.org"]):
             eb = EmailBackend()
             self.assertEqual(([], False), eb._only_safe_emails([]))
@@ -76,15 +76,15 @@ class TestEmailBackend(TestCase):
                                                    "unsafe2@example.org",
                                                    "safe@example.org"]))
 
-    def test_whitelist(self):
-        with self.settings(SAFE_EMAIL_WHITELIST=[r".*@example\.com",
+    def test_safelist(self):
+        with self.settings(SAFE_EMAIL_SAFELIST=[r".*@example\.com",
                                                  r"safe.*@example\.org"]):
             eb = EmailBackend()
-            self.assertTrue(eb._is_whitelisted("example@example.com"))
-            self.assertTrue(eb._is_whitelisted("example2@example.com"))
-            self.assertTrue(eb._is_whitelisted("safe@example.org"))
-            self.assertTrue(eb._is_whitelisted("safe+2@example.org"))
-            self.assertFalse(eb._is_whitelisted("unsafe@example.org"))
+            self.assertTrue(eb._is_safelisted("example@example.com"))
+            self.assertTrue(eb._is_safelisted("example2@example.com"))
+            self.assertTrue(eb._is_safelisted("safe@example.org"))
+            self.assertTrue(eb._is_safelisted("safe+2@example.org"))
+            self.assertFalse(eb._is_safelisted("unsafe@example.org"))
 
     def _setup_message(self, from_email='sender@example.com', to=None,
                        cc=None, bcc=None):
