@@ -21,7 +21,7 @@ setup(
     author_email="aca-it@uw.edu",
     include_package_data=True,
     install_requires=[
-        'Django>=2.1,<3.3',
+        'Django>=2.2,<4',
     ],
     license='Apache License, Version 2.0',
     description='A django email backend that sends all emails to a given address',
@@ -32,6 +32,6 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.8',
     ],
 )
