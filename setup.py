@@ -1,3 +1,6 @@
+# Copyright 2024 UW-IT, University of Washington
+# SPDX-License-Identifier: Apache-2.0
+
 import os
 from setuptools import setup
 
@@ -17,11 +20,11 @@ setup(
     name='Django-Safe-EmailBackend',
     version=VERSION,
     packages=['saferecipient'],
-    author="UW-IT AXDD",
+    author="UW-IT T&LS",
     author_email="aca-it@uw.edu",
     include_package_data=True,
     install_requires=[
-        'Django>=2.2,<5',
+        'Django>=3.2,<5',
     ],
     license='Apache License, Version 2.0',
     description='A django email backend that sends all emails to a given address',
@@ -32,6 +35,5 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.8',
     ],
 )
