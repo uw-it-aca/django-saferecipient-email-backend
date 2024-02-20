@@ -1,4 +1,4 @@
-# Copyright 2023 UW-IT, University of Washington
+# Copyright 2024 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
 
@@ -15,10 +15,10 @@ class TestEmailBackend(TestCase):
         with self.settings(SAFE_EMAIL_RECIPIENT=self.SAFE_EMAIL):
             message = self._setup_message()
             EmailBackend()._safeguard(message)
-            self.assertEquals(message.from_email, 'safe@example.com')
-            self.assertEquals(message.to, ['safe@example.com'])
-            self.assertEquals(message.cc, ['safe@example.com'])
-            self.assertEquals(
+            self.assertEqual(message.from_email, 'safe@example.com')
+            self.assertEqual(message.to, ['safe@example.com'])
+            self.assertEqual(message.cc, ['safe@example.com'])
+            self.assertEqual(
                 message.attachments[0].get_payload(),
                 ("Original From: sender@example.com\nOriginal To: "
                  "['recipient@example.com']\nOriginal CC: "
@@ -33,14 +33,14 @@ class TestEmailBackend(TestCase):
                                           cc=["safe+safe@example.org"],
                                           bcc=["unsafe@example.net"])
             EmailBackend()._safeguard(message)
-            self.assertEquals(message.from_email, 'sender@example.com')
-            self.assertEquals(message.to, ['recipient@example.com'])
-            self.assertEquals(message.cc, ["safe+safe@example.org"])
-            self.assertEquals(message.attachments[0].get_payload(),
-                              ("Original From: sender@example.com\n"
-                               "Original To: ['recipient@example.com']\n"
-                               "Original CC: ['safe+safe@example.org']\n"
-                               "Original BCC: ['unsafe@example.net']\n"))
+            self.assertEqual(message.from_email, 'sender@example.com')
+            self.assertEqual(message.to, ['recipient@example.com'])
+            self.assertEqual(message.cc, ["safe+safe@example.org"])
+            self.assertEqual(message.attachments[0].get_payload(),
+                             ("Original From: sender@example.com\n"
+                              "Original To: ['recipient@example.com']\n"
+                              "Original CC: ['safe+safe@example.org']\n"
+                              "Original BCC: ['unsafe@example.net']\n"))
 
     def test_no_setting(self):
         message = self._setup_message()
