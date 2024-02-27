@@ -25,7 +25,10 @@ class EmailBackend(SMTPEmailBackend):
         """
         See https://code.djangoproject.com/ticket/34504
         """
-        ssl_context = super().ssl_context
+        try:
+            ssl_context = super().ssl_context
+        except AttributeError:  # Django < 4
+            ssl_context = ssl.SSLContext()
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
         return ssl_context
