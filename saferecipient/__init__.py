@@ -78,4 +78,4 @@ class EmailBackend(SMTPEmailBackend):
         it's assumed it's not safelisted.
         """
         return (hasattr(settings, "SAFE_EMAIL_SAFELIST") and
-            any(re.match(m, email) for m in settings.SAFE_EMAIL_SAFELIST))
+                any(re.match(m, email) for m in settings.SAFE_EMAIL_SAFELIST))
