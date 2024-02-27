@@ -1,16 +1,18 @@
 # Copyright 2024 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-
-"""SMTP email backend class that only sends email to a safe email address"""
 import re
+import ssl
 from django.conf import settings
 from django.core.mail.backends.smtp import EmailBackend as SMTPEmailBackend
+from django.utils.functional import cached_property
 from email.mime.text import MIMEText
 
 
 class EmailBackend(SMTPEmailBackend):
     """
+    An SMTP email backend class that only sends email to a safe email address.
+
     Re-routes email, so it goes to, and comes from
     settings.SAFE_EMAIL_RECIPIENT.
 
@@ -18,10 +20,23 @@ class EmailBackend(SMTPEmailBackend):
     that is attached to the message.
     """
 
+    @cached_property
+    def ssl_context(self):
+        """
+        See https://code.djangoproject.com/ticket/34504
+        """
+        try:
+            ssl_context = super().ssl_context
+        except AttributeError:  # Django < 4
+            ssl_context = ssl.SSLContext()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        return ssl_context
+
     def send_messages(self, email_messages):
         for message in email_messages:
             self._safeguard(message)
-        return super(EmailBackend, self).send_messages(email_messages)
+        return super().send_messages(email_messages)
 
     def _safeguard(self, message):
         originals = ("Original From: {}\nOriginal To: {}\nOriginal CC: {}\n"
@@ -46,9 +61,9 @@ class EmailBackend(SMTPEmailBackend):
             message.attach(text_attachment)
 
     def _only_safe_emails(self, emails):
-        """"Given a list of emails, checks whether they are all in the white
-        list."""
-
+        """"
+        Given a list of emails, checks whether they are all in the safe list.
+        """
         email_modified = False
         if any(not self._is_safelisted(email) for email in emails):
             email_modified = True
@@ -58,8 +73,9 @@ class EmailBackend(SMTPEmailBackend):
         return emails, email_modified
 
     def _is_safelisted(self, email):
-        """Check if an email is in the safelist. If there's no safelist,
-        it's assumed it's not safelisted."""
-
-        return hasattr(settings, "SAFE_EMAIL_SAFELIST") and \
-            any(re.match(m, email) for m in settings.SAFE_EMAIL_SAFELIST)
+        """
+        Check if an email is in the safelist. If there's no safelist,
+        it's assumed it's not safelisted.
+        """
+        return (hasattr(settings, "SAFE_EMAIL_SAFELIST") and
+                any(re.match(m, email) for m in settings.SAFE_EMAIL_SAFELIST))

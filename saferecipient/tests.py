@@ -4,12 +4,18 @@
 
 from django.core.mail import EmailMultiAlternatives
 from django.test import TestCase
-
 from saferecipient import EmailBackend
+import ssl
 
 
 class TestEmailBackend(TestCase):
     SAFE_EMAIL = 'safe@example.com'
+
+    def test_ssl_context(self):
+        backend = EmailBackend()
+        ssl_context = backend.ssl_context
+        self.assertFalse(ssl_context.check_hostname)
+        self.assertEqual(ssl_context.verify_mode, ssl.CERT_NONE)
 
     def test_safeguard(self):
         with self.settings(SAFE_EMAIL_RECIPIENT=self.SAFE_EMAIL):
