@@ -36,7 +36,7 @@ class EmailBackend(SMTPEmailBackend):
     def send_messages(self, email_messages):
         for message in email_messages:
             self._safeguard(message)
-        return super(EmailBackend, self).send_messages(email_messages)
+        return super().send_messages(email_messages)
 
     def _safeguard(self, message):
         originals = ("Original From: {}\nOriginal To: {}\nOriginal CC: {}\n"
@@ -61,9 +61,9 @@ class EmailBackend(SMTPEmailBackend):
             message.attach(text_attachment)
 
     def _only_safe_emails(self, emails):
-        """"Given a list of emails, checks whether they are all in the white
-        list."""
-
+        """"
+        Given a list of emails, checks whether they are all in the safe list.
+        """
         email_modified = False
         if any(not self._is_safelisted(email) for email in emails):
             email_modified = True
@@ -73,8 +73,9 @@ class EmailBackend(SMTPEmailBackend):
         return emails, email_modified
 
     def _is_safelisted(self, email):
-        """Check if an email is in the safelist. If there's no safelist,
-        it's assumed it's not safelisted."""
-
-        return hasattr(settings, "SAFE_EMAIL_SAFELIST") and \
-            any(re.match(m, email) for m in settings.SAFE_EMAIL_SAFELIST)
+        """
+        Check if an email is in the safelist. If there's no safelist,
+        it's assumed it's not safelisted.
+        """
+        return (hasattr(settings, "SAFE_EMAIL_SAFELIST") and
+            any(re.match(m, email) for m in settings.SAFE_EMAIL_SAFELIST))
