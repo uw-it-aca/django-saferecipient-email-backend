@@ -18,6 +18,16 @@ class EmailBackend(SMTPEmailBackend):
     that is attached to the message.
     """
 
+    @cached_property
+    def ssl_context(self):
+        """
+        See https://code.djangoproject.com/ticket/34504
+        """
+        ssl_context = super().ssl_context
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        return ssl_context
+
     def send_messages(self, email_messages):
         for message in email_messages:
             self._safeguard(message)
