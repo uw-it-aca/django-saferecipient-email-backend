@@ -1,16 +1,18 @@
 # Copyright 2024 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
-
-"""SMTP email backend class that only sends email to a safe email address"""
 import re
+import ssl
 from django.conf import settings
 from django.core.mail.backends.smtp import EmailBackend as SMTPEmailBackend
+from django.utils.functional import cached_property
 from email.mime.text import MIMEText
 
 
 class EmailBackend(SMTPEmailBackend):
     """
+    An SMTP email backend class that only sends email to a safe email address.
+
     Re-routes email, so it goes to, and comes from
     settings.SAFE_EMAIL_RECIPIENT.
 
