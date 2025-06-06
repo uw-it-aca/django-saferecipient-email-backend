@@ -20,14 +20,14 @@ setup(
     name='Django-Safe-EmailBackend',
     version=VERSION,
     packages=['saferecipient'],
-    author="UW-IT T&LS",
+    author="UW-IT Student & Educational Technology Services",
     author_email="aca-it@uw.edu",
     include_package_data=True,
     install_requires=[
-        'Django>=3.2,<5',
+        'django>=3.2,<6',
     ],
     license='Apache License, Version 2.0',
-    description='A django email backend that sends all emails to a given address',
+    description='A Django email backend that sends all emails to a given address',
     long_description=README,
     url='https://github.com/uw-it-aca/django-saferecipient-email-backend',
     classifiers=[
