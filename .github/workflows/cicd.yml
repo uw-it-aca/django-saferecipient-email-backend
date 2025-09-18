@@ -28,7 +28,7 @@ name: tests
 env:
   APP_NAME: saferecipient
   CONF_PATH: conf
-  COVERAGE_DJANGO_VERSION: '4.2'
+  COVERAGE_DJANGO_VERSION: '5.2'
 on:
   push:
     branches: [main, master, qa, develop]

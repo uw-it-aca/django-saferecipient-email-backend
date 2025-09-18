@@ -1,7 +1,7 @@
 [![Build Status](https://github.com/uw-it-aca/django-saferecipient-email-backend/workflows/tests/badge.svg)](https://github.com/uw-it-aca/django-saferecipient-email-backend/actions)
 [![Coverage Status](https://coveralls.io/repos/github/uw-it-aca/django-saferecipient-email-backend/badge.svg?branch=main)](https://coveralls.io/github/uw-it-aca/django-saferecipient-email-backend?branch=main)
 [![PyPi Version](https://img.shields.io/pypi/v/django-safe-emailbackend.svg)](https://pypi.python.org/pypi/django-safe-emailbackend)
-![Python versions](https://img.shields.io/badge/python-3.10-blue.svg)
+![Python versions](https://img.shields.io/badge/python-3.12-blue.svg)
 
 
 django-saferecipient-email-backend
