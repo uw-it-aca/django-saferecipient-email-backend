@@ -24,7 +24,7 @@ setup(
     author_email="aca-it@uw.edu",
     include_package_data=True,
     install_requires=[
-        'django>=3.2,<6',
+        'django'
     ],
     license='Apache License, Version 2.0',
     description='A Django email backend that sends all emails to a given address',
